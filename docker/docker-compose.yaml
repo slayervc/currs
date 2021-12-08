@@ -1,0 +1,34 @@
+version: '3.7'
+services:
+    cdb:
+        container_name: cdb
+        image: postgres:14
+        restart: always
+        environment:
+            - POSTGRES_PASSWORD=pass
+        volumes:
+            - cpgdata:/var/lib/postgresql/data
+        ports:
+            - "5433:5433"
+        networks:
+            - cdb
+
+    cphp:
+        container_name: curs
+        image: 'curs:latest'
+        build:
+            context: ./php-fpm
+        restart: always
+        volumes:
+            - ..:/www
+            - ./php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+        networks:
+            - cphp
+            - cdb
+
+networks:
+    cphp:
+    cdb:
+
+volumes:
+    cpgdata:

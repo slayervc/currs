@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity()
+ * @ORM\Table(name="currency_rate", indexes={@ORM\Index(name="currency_pair_idx", columns={"base", "quote"})})
  */
 class CurrencyRate
 {

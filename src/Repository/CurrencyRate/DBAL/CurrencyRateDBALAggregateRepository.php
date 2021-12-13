@@ -8,6 +8,7 @@ use App\DTO\Currency\CurrencyPair;
 use App\DTO\Currency\CurrencyRateCollection;
 use App\DTO\Rate\TimestampableRate;
 use App\Repository\CurrencyRate\CurrencyRateAggregateRepositoryInterface;
+use App\Repository\CurrencyRate\Exception\CurrencyRateAggregateRepositoryException;
 use Doctrine\DBAL\Connection;
 
 class CurrencyRateDBALAggregateRepository implements CurrencyRateAggregateRepositoryInterface
@@ -21,6 +22,15 @@ class CurrencyRateDBALAggregateRepository implements CurrencyRateAggregateReposi
         $this->connection = $connection;
     }
 
+    /**
+     * @param  CurrencyPair            $currencyPair
+     * @param  \DateTimeInterface      $from
+     * @param  \DateTimeInterface|null $to
+     * @param  int                     $stepSecs
+     *
+     * @return CurrencyRateCollection
+     * @throws CurrencyRateAggregateRepositoryException
+     */
     public function getAllByDateTimeRangeWithStep(
         CurrencyPair $currencyPair,
         \DateTimeInterface $from,
@@ -44,15 +54,19 @@ class CurrencyRateDBALAggregateRepository implements CurrencyRateAggregateReposi
         ORDER BY datetime;
         SQL;
 
-        $data =$this->connection->prepare($sql)
-            ->executeQuery([
-                'base' => $currencyPair->getBase(),
-                'quote' => $currencyPair->getQuote(),
-                'step' => $stepSecs,
-                'from' => $from->format(self::DATETIME_FORMAT),
-                'to' => $to->format(self::DATETIME_FORMAT)
-            ])
-            ->fetchAllAssociative();
+        try {
+            $data = $this->connection->prepare($sql)->executeQuery(
+                    [
+                        'base'  => $currencyPair->getBase(),
+                        'quote' => $currencyPair->getQuote(),
+                        'step'  => $stepSecs,
+                        'from'  => $from->format(self::DATETIME_FORMAT),
+                        'to'    => $to->format(self::DATETIME_FORMAT)
+                    ]
+                )->fetchAllAssociative();
+        } catch (\Throwable $e) {
+            throw new CurrencyRateAggregateRepositoryException('Could not retrieve data from database', 0 ,$e);
+        }
 
         $rates = [];
         foreach ($data as $row) {

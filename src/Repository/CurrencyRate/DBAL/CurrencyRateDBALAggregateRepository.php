@@ -5,30 +5,20 @@ namespace App\Repository\CurrencyRate\DBAL;
 
 
 use App\DTO\Currency\CurrencyPair;
-use App\DTO\Currency\CurrencyRateCollection;
+use App\DTO\Rate\SingleCurrencyPairRateCollection;
 use App\DTO\Rate\TimestampableRate;
 use App\Repository\CurrencyRate\CurrencyRateAggregateRepositoryInterface;
 use App\Repository\CurrencyRate\Exception\CurrencyRateAggregateRepositoryException;
-use Doctrine\DBAL\Connection;
 
-class CurrencyRateDBALAggregateRepository implements CurrencyRateAggregateRepositoryInterface
+class CurrencyRateDBALAggregateRepository extends AbstractCurrencyRateDBALRepository implements CurrencyRateAggregateRepositoryInterface
 {
-    private const DATETIME_FORMAT = 'Y-m-d H:i:s';
-
-    private Connection $connection;
-
-    public function __construct(Connection $connection)
-    {
-        $this->connection = $connection;
-    }
-
     /**
      * @param  CurrencyPair            $currencyPair
      * @param  \DateTimeInterface      $from
      * @param  \DateTimeInterface|null $to
      * @param  int                     $stepSecs
      *
-     * @return CurrencyRateCollection
+     * @return SingleCurrencyPairRateCollection
      * @throws CurrencyRateAggregateRepositoryException
      */
     public function getAllByDateTimeRangeWithStep(
@@ -36,10 +26,11 @@ class CurrencyRateDBALAggregateRepository implements CurrencyRateAggregateReposi
         \DateTimeInterface $from,
         ?\DateTimeInterface $to,
         int $stepSecs
-    ): CurrencyRateCollection {
-        $sql = <<<'SQL'
+    ): SingleCurrencyPairRateCollection {
+        $table = static::TABLE_NAME;
+        $sql = <<<SQL
         SELECT rate, datetime
-        FROM currency_rate c
+        FROM {$table} c
         INNER JOIN
         (SELECT MIN(datetime) as start
         FROM currency_rate
@@ -60,8 +51,8 @@ class CurrencyRateDBALAggregateRepository implements CurrencyRateAggregateReposi
                         'base'  => $currencyPair->getBase(),
                         'quote' => $currencyPair->getQuote(),
                         'step'  => $stepSecs,
-                        'from'  => $from->format(self::DATETIME_FORMAT),
-                        'to'    => $to->format(self::DATETIME_FORMAT)
+                        'from'  => $from->format(static::DATETIME_FORMAT),
+                        'to'    => $to->format(static::DATETIME_FORMAT)
                     ]
                 )->fetchAllAssociative();
         } catch (\Throwable $e) {
@@ -73,6 +64,6 @@ class CurrencyRateDBALAggregateRepository implements CurrencyRateAggregateReposi
             $rates[] = new TimestampableRate(new \DateTimeImmutable($row['datetime']), floatval($row['rate']));
         }
 
-        return new CurrencyRateCollection($currencyPair, ...$rates);
+        return new SingleCurrencyPairRateCollection($currencyPair, ...$rates);
     }
 }

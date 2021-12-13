@@ -34,3 +34,9 @@ services:
 
     App\Repository\CurrencyRate\CurrencyRateAggregateRepositoryInterface:
         class: App\Repository\CurrencyRate\DBAL\CurrencyRateDBALAggregateRepository
+
+    App\Repository\CurrencyRate\CurrencyRateReadRepositoryInterface:
+        class: App\Repository\CurrencyRate\Dummy\CurrencyRateReadDummyRepository
+
+    App\Repository\CurrencyRate\CurrencyRateWriteRepositoryInterface:
+        class: App\Repository\CurrencyRate\DBAL\CurrencyRateDBALWriteRepository

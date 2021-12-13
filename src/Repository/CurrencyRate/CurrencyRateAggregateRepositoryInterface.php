@@ -5,7 +5,7 @@ namespace App\Repository\CurrencyRate;
 
 
 use App\DTO\Currency\CurrencyPair;
-use App\DTO\Currency\CurrencyRateCollection;
+use App\DTO\Rate\SingleCurrencyPairRateCollection;
 use App\Repository\CurrencyRate\Exception\CurrencyRateAggregateRepositoryException;
 
 
@@ -17,7 +17,7 @@ interface CurrencyRateAggregateRepositoryInterface
      * @param  \DateTimeInterface|null $to
      * @param  int                     $stepSecs
      *
-     * @return CurrencyRateCollection
+     * @return SingleCurrencyPairRateCollection
      * @throws CurrencyRateAggregateRepositoryException
      */
     public function getAllByDateTimeRangeWithStep(
@@ -25,5 +25,5 @@ interface CurrencyRateAggregateRepositoryInterface
         \DateTimeInterface $from,
         ?\DateTimeInterface $to,
         int $stepSecs
-    ): CurrencyRateCollection;
+    ): SingleCurrencyPairRateCollection;
 }

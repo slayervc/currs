@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace App\DTO\Currency;
+namespace App\DTO\Rate;
 
 
-use App\DTO\Rate\TimestampableRate;
+use App\DTO\Currency\CurrencyPair;
 
-class CurrencyRateCollection
+class SingleCurrencyPairRateCollection
 {
     private CurrencyPair $currencyPair;
 

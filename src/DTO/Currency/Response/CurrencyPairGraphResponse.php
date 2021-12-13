@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\DTO\Currency\Response;
 
 
-use App\DTO\Currency\CurrencyRateCollection;
+use App\DTO\Rate\SingleCurrencyPairRateCollection;
 
 class CurrencyPairGraphResponse
 {
@@ -12,7 +12,7 @@ class CurrencyPairGraphResponse
     private ?string $quote = null;
     private array $rates = [];
 
-    public static function createFromRateCollectionDTO(CurrencyRateCollection $dto, string $dateTimeFormat): self
+    public static function createFromRateCollectionDTO(SingleCurrencyPairRateCollection $dto, string $dateTimeFormat): self
     {
         $result = new self();
         $result->base = $dto->getCurrencyPair()->getBase();

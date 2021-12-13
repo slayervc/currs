@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Repository;
+namespace App\Repository\CurrencyRate;
 
 
 use App\DTO\Currency\CurrencyPair;
 use App\DTO\Currency\CurrencyRateCollection;
 
-interface CurrencyRateRepositoryInterface
+interface CurrencyRateAggregateRepositoryInterface
 {
     public function getAllByDateTimeRangeWithStep(
         CurrencyPair $currencyPair,

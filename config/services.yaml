@@ -32,5 +32,5 @@ services:
     App\Settings\DateTimeSettings:
         factory: ['@App\Settings\DateTimeSettingsFactory', 'createSettings']
 
-    App\Repository\CurrencyRateRepositoryInterface:
-        class: App\Repository\Dummy\CurrencyRateDummyRepository
+    App\Repository\CurrencyRate\CurrencyRateAggregateRepositoryInterface:
+        class: App\Repository\CurrencyRate\DBAL\CurrencyRateDBALAggregateRepository

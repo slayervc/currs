@@ -7,7 +7,7 @@ namespace App\Controller;
 use App\DTO\Currency\CurrencyPair;
 use App\DTO\Currency\Request\CurrencyPairGraphRequest;
 use App\DTO\Currency\Response\CurrencyPairGraphResponse;
-use App\Repository\CurrencyRateRepositoryInterface;
+use App\Repository\CurrencyRate\CurrencyRateAggregateRepositoryInterface;
 use App\Settings\DateTimeSettings;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,14 +17,14 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class GraphController
 {
-    private CurrencyRateRepositoryInterface $currencyRateRepository;
+    private CurrencyRateAggregateRepositoryInterface $currencyRateRepository;
     private DenormalizerInterface $denormalizer;
     private NormalizerInterface $normalizer;
 
     public function __construct(
         DenormalizerInterface $denormalizer,
         NormalizerInterface $normalizer,
-        CurrencyRateRepositoryInterface $currencyRateRepository
+        CurrencyRateAggregateRepositoryInterface $currencyRateRepository
     ) {
         $this->denormalizer = $denormalizer;
         $this->normalizer = $normalizer;

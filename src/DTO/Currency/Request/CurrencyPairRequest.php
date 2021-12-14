@@ -11,10 +11,34 @@ class CurrencyPairRequest
     /**
      * @Assert\Regex("/^[A-Z]{3}$/")
      */
-    public string $base;
+    private string $base;
 
     /**
      * @Assert\Regex("/^[A-Z]{3}$/")
      */
-    public string $quote;
+    private string $quote;
+
+    public function getBase(): string
+    {
+        return $this->base;
+    }
+
+    public function setBase(string $base): CurrencyPairRequest
+    {
+        $this->base = $base;
+
+        return $this;
+    }
+
+    public function getQuote(): string
+    {
+        return $this->quote;
+    }
+
+    public function setQuote(string $quote): CurrencyPairRequest
+    {
+        $this->quote = $quote;
+
+        return $this;
+    }
 }

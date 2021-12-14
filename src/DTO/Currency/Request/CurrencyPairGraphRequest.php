@@ -12,24 +12,71 @@ class CurrencyPairGraphRequest
      * @Assert\NotBlank()
      * @Assert\DateTime()
      */
-    public string $from;
+    private ?string $from =null;
 
     /**
-     * @Assert\NotBlank()
      * @Assert\DateTime()
      */
-    public string $to;
+    private ?string $to = null;
 
     /**
      * @Assert\NotBlank()
      * @Assert\Positive()
      */
-    public string $step;
+    private ?string $step = null;
 
     /**
      * @var CurrencyPairRequest[]
      *
      * @Assert\Valid()
      */
-    public array $currencyPairs;
+    private array $currencyPairs = [];
+
+    public function getFrom(): ?string
+    {
+        return $this->from;
+    }
+
+    public function setFrom(?string $from): CurrencyPairGraphRequest
+    {
+        $this->from = $from;
+
+        return $this;
+    }
+
+    public function getTo(): ?string
+    {
+        return $this->to;
+    }
+
+    public function setTo(?string $to): CurrencyPairGraphRequest
+    {
+        $this->to = $to;
+
+        return $this;
+    }
+
+    public function getStep(): ?string
+    {
+        return $this->step;
+    }
+
+    public function setStep(?string $step): CurrencyPairGraphRequest
+    {
+        $this->step = $step;
+
+        return $this;
+    }
+
+    public function getCurrencyPairs(): array
+    {
+        return $this->currencyPairs;
+    }
+
+    public function setCurrencyPairs(array $currencyPairs): CurrencyPairGraphRequest
+    {
+        $this->currencyPairs = $currencyPairs;
+
+        return $this;
+    }
 }
